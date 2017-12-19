@@ -2,6 +2,7 @@ package com.example.abhi.mvp.injection.components
 
 import com.example.abhi.mvp.injection.modules.FragmentModule
 import com.example.abhi.mvp.injection.scopes.PerFragment
+import com.example.abhi.mvp.ui.main.MainActivityFragment
 import dagger.Subcomponent
 
 /**
@@ -11,4 +12,6 @@ import dagger.Subcomponent
  */
 @PerFragment
 @Subcomponent(modules = [(FragmentModule::class)])
-interface FragmentComponent
+interface FragmentComponent {
+    fun inject(mainActivityFragment: MainActivityFragment)
+}

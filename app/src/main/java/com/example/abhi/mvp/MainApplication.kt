@@ -22,8 +22,8 @@ class MainApplication : MultiDexApplication() {
     private var appComponent: AppComponent? = null
 
     companion object {
-        operator fun get(context: Context): MainApplication {
-            return context.applicationContext as MainApplication
+        operator fun get(context: Context?): MainApplication {
+            return context!!.applicationContext as MainApplication
         }
     }
 

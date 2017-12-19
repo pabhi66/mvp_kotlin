@@ -1,48 +1,67 @@
 package com.example.abhi.mvp.ui.base
 
-import rx.subscriptions.CompositeSubscription
-import rx.subscriptions.Subscriptions
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+
 
 /**
  * @author Abhishek Prajapati
  * @version 1.0.0
  * @since 12/18/17.
+ * Base class that implements the Presenter interface and provides a base implementation for
+ * attachView() and detachView(). It also handles keeping a reference to the mvpView that
+ * can be accessed from the children classes by calling getMvpView().
+ *
  */
-
 open class BasePresenter<V : BaseView> : Presenter<V> {
 
-    var baseView: V? = null
-    private val compositeSubscription = CompositeSubscription()
+    private var view: V? = null
+
+    private val compositeDisposable = CompositeDisposable()
+
+    override fun getView(): V? {
+        return view
+    }
+
+
+    override val isViewAttached: Boolean
+        get() = view != null
 
     override fun attachView(view: V) {
-        this.baseView = view
+        this.view = view
     }
 
     override fun detachView() {
-        baseView = null
-        if(!compositeSubscription.isUnsubscribed) {
-            compositeSubscription.clear()
+        view = null
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.clear()
         }
     }
 
-    override val isViewAttached: Boolean
-        get() = baseView != null
-
-    override val view: V?
-        get() = baseView
-
-    fun checkViewAttached() {
-        if(!isViewAttached) throw ViewNotAttachedException()
+    /**
+     * Check view attached.
+     */
+    protected fun checkViewAttached() {
+        if (!isViewAttached) {
+            throw ViewNotAttachedException()
+        }
     }
 
-    fun addSubscription(subs: Subscriptions) {
-        compositeSubscription.add(subs)
+    /**
+     * Add disposable.
+     *
+     * @param disposable the disposable
+     */
+    fun addDisposable(disposable: Disposable) {
+        compositeDisposable.add(disposable)
     }
 
-    private fun CompositeSubscription.add(subs: Subscriptions) {}
-
-    private class ViewNotAttachedException internal constructor() : RuntimeException("Please call Presenter.attachView(MvpView) before" + " requesting data to the Presenter")
-
+    private class ViewNotAttachedException
+    /**
+     * Instantiates a new View not attached exception.
+     */
+    internal constructor() : RuntimeException("Please call Presenter.attachView(BaseView) before" + " requesting data to the Presenter")
 }
+
 
 

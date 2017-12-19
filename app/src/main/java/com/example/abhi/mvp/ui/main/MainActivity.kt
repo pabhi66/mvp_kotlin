@@ -5,14 +5,27 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.abhi.mvp.R
+import com.example.abhi.mvp.injection.components.ActivityComponent
+import com.example.abhi.mvp.ui.base.BaseActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+
+    override fun inject(activityComponent: ActivityComponent) {
+        activityComponent.inject(this)
+    }
+
+    override fun attachView() {
+    }
+
+    override fun detachPresenter() {
+    }
+
+    override val layout: Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
     }
 
