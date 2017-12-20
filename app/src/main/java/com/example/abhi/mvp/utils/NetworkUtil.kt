@@ -14,7 +14,8 @@ import retrofit2.HttpException
  */
 object NetworkUtil {
 
-    /**
+    @Suppress("DEPRECATED_IDENTITY_EQUALS")
+            /**
      * Returns true if the Throwable is an instance of RetrofitError with an http status code equals
      * to the given one.
      *
@@ -23,7 +24,7 @@ object NetworkUtil {
      * @return the boolean
      */
     fun isHttpStatusCode(throwable: Throwable, statusCode: Int): Boolean {
-        return throwable is HttpException && (throwable as HttpException).code() === statusCode
+        return throwable is HttpException && throwable.code() === statusCode
     }
 
     /**
